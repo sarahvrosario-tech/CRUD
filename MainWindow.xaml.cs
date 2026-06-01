@@ -49,6 +49,7 @@ public partial class MainWindow : Window
                         while (reader.Read())
                         {
                             MessageBox.Show(reader.GetString(1));
+                            
                         }
                     }
 
@@ -63,5 +64,12 @@ public partial class MainWindow : Window
                 }
             }
         }
+    }
+
+    private void JanelaCadastro_OnClick(object sender, RoutedEventArgs e)
+    {
+        Cadastro JanelaCadastro = new Cadastro();
+        JanelaCadastro.Show();
+       
     }
 }

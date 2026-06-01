@@ -64,7 +64,8 @@
                         Foreground="#2563EB"
                         BorderThickness="0"
                         Margin="0,15,0,0"
-                        Cursor="Hand">
+                        Cursor="Hand"
+                        Click="JanelaCadastro_OnClick">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
