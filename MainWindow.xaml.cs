@@ -35,7 +35,7 @@ public partial class MainWindow : Window
             {
                 command.Parameters.AddWithValue("@username", TxtUsuario.Text);
                 command.Parameters.AddWithValue("@senha", TxtSenha.Password);
-                
+
                 try
                 {
                     conexao.Open();
@@ -46,16 +46,14 @@ public partial class MainWindow : Window
                             MessageBox.Show("Usuário e/ou senha incorretos!", "Erro!");
                             return;
                         }
+
                         while (reader.Read())
                         {
                             MessageBox.Show(reader.GetString(1));
-                            
                         }
                     }
 
                     command.ExecuteReader();
-                    
-                    
                 }
                 catch (Exception exeption)
                 {
@@ -66,10 +64,10 @@ public partial class MainWindow : Window
         }
     }
 
-    private void JanelaCadastro_OnClick(object sender, RoutedEventArgs e)
+    private void btnCadastro_OnClick(object sender, RoutedEventArgs e)
     {
-        Cadastro JanelaCadastro = new Cadastro();
-        JanelaCadastro.Show();
-       
+        var JanelaCadastro = new Cadastro();
+        JanelaCadastro.ShowDialog();
+        Show();
     }
 }
