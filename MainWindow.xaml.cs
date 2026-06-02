@@ -26,41 +26,34 @@ public partial class MainWindow : Window
             return;
         }
 
-        using (var conexao = new MySqlConnection(App.StringConexao))
+        using var conexao = new MySqlConnection(App.StringConexao);
+        const string  query = "SELECT * FROM usuarios WHERE username = @username AND senha = @senha";
+
+        using var command = new MySqlCommand(query, conexao);
+        command.Parameters.AddWithValue("@username", TxtUsuario.Text);
+        command.Parameters.AddWithValue("@senha", TxtSenha.Password);
+
+        try
         {
-            var query = "SELECT * FROM usuarios WHERE username = @username AND senha = @senha";
-
-            using (var command = new MySqlCommand(query, conexao))
-
+            conexao.Open();
+            using var reader = command.ExecuteReader();
+            if (!reader.HasRows)
             {
-                command.Parameters.AddWithValue("@username", TxtUsuario.Text);
-                command.Parameters.AddWithValue("@senha", TxtSenha.Password);
-
-                try
-                {
-                    conexao.Open();
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (!reader.HasRows)
-                        {
-                            MessageBox.Show("Usuário e/ou senha incorretos!", "Erro!");
-                            return;
-                        }
-
-                        while (reader.Read())
-                        {
-                            MessageBox.Show(reader.GetString(1));
-                        }
-                    }
-
-                    command.ExecuteReader();
-                }
-                catch (Exception exeption)
-                {
-                    Console.WriteLine(exeption);
-                    throw;
-                }
+                MessageBox.Show("Usuário e/ou senha incorretos!", "Erro!");
+                return;
             }
+
+            while (reader.Read())
+            {
+                MessageBox.Show(reader.GetString(1));
+            }
+
+            command.ExecuteReader();
+        }
+        catch (Exception exeption)
+        {
+            Console.WriteLine(exeption);
+            throw;
         }
     }
 
