@@ -1,4 +1,5 @@
 using System.Windows;
+using CRUD.Modelos;
 using MySql.Data.MySqlClient;
 
 namespace CRUD;
@@ -14,53 +15,60 @@ public partial class MainWindow : Window
     {
         if (string.IsNullOrWhiteSpace(TxtUsuario.Text))
         {
-            MessageBox.Show("Necessario preencher usuário!");
+            MessageBox.Show("Preencha o campo de usuário!");
             TxtUsuario.Focus();
             return;
         }
-
+        
         if (string.IsNullOrWhiteSpace(TxtSenha.Password))
         {
-            MessageBox.Show("Necessario preencher senha!");
+            MessageBox.Show("Preencha o campo de senha!");
             TxtSenha.Focus();
             return;
         }
 
         using var conexao = new MySqlConnection(App.StringConexao);
-        const string  query = "SELECT * FROM usuarios WHERE username = @username AND senha = @senha";
+        const string query = "SELECT * FROM usuarios WHERE username = @username AND senha = @senha";
 
-        using var command = new MySqlCommand(query, conexao);
-        command.Parameters.AddWithValue("@username", TxtUsuario.Text);
-        command.Parameters.AddWithValue("@senha", TxtSenha.Password);
-
+        using var comando = new MySqlCommand(query, conexao);
+        comando.Parameters.AddWithValue("@username", TxtUsuario.Text);
+        comando.Parameters.AddWithValue("@senha", TxtSenha.Password);
+                
         try
         {
             conexao.Open();
-            using var reader = command.ExecuteReader();
-            if (!reader.HasRows)
+            using var leitor = comando.ExecuteReader();
+            if (!leitor.HasRows)
             {
-                MessageBox.Show("Usuário e/ou senha incorretos!", "Erro!");
+                MessageBox.Show("Usuário e/ou senha estão errados.", "Erro!");
                 return;
             }
 
-            while (reader.Read())
+            while (leitor.Read())
             {
-                MessageBox.Show(reader.GetString(1));
-            }
+                var usuarioBanco = new Usuario();
 
-            command.ExecuteReader();
+                usuarioBanco.Id = leitor.GetInt32(0);
+                usuarioBanco.Nome = leitor.GetString(1);
+                usuarioBanco.Email = leitor.GetString(2);
+                usuarioBanco.Senha = leitor.GetString(3);
+                usuarioBanco.Username = leitor.GetString(4);
+                
+                new MeuPerfil(usuarioBanco).Show();
+            }
         }
-        catch (Exception exeption)
+        catch (Exception exception)
         {
-            Console.WriteLine(exeption);
-            throw;
+            Console.WriteLine(exception);
+            return;
         }
     }
 
-    private void btnCadastro_OnClick(object sender, RoutedEventArgs e)
+    private void BtnCadastro_OnClick(object sender, RoutedEventArgs e)
     {
-        var JanelaCadastro = new Cadastro();
-        JanelaCadastro.ShowDialog();
+        var janelaCadastro = new Cadastro();
+        Hide();
+        janelaCadastro.ShowDialog();
         Show();
     }
 }
