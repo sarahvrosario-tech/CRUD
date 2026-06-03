@@ -61,12 +61,10 @@ public partial class MeuPerfil : Window
         command.Parameters.AddWithValue("@nome", UsuarioAtual.Nome);
         command.Parameters.AddWithValue("@email", UsuarioAtual.Email);
         command.Parameters.AddWithValue("@id", UsuarioAtual.Id);
-        
-        if  (senhaFoiAterada) command.Parameters.AddWithValue("@senha", UsuarioAtual.Senha);
-            
-            
-            
-            
+
+        if (senhaFoiAterada) command.Parameters.AddWithValue("@senha", UsuarioAtual.Senha);
+
+
         try
         {
             conexao.Open();
@@ -78,6 +76,42 @@ public partial class MeuPerfil : Window
         catch (Exception exception)
         {
             MessageBox.Show($"Erro de DB.");
+        }
+    }
+
+
+    private void BtnDeletarPerfil_OnClick(object sender, RoutedEventArgs e)
+    {
+        
+         var resultadoMessageBox = MessageBox.Show("Você tem certeza que deseja apagar o seu perfil?", "Confirmação de exclusão",
+            MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+         if (resultadoMessageBox == MessageBoxResult.No) return;
+         
+        string query = "DELETE FROM usuarios   WHERE id = @id";
+        using var conexao = new MySqlConnection(App.StringConexao);
+        using var command = new MySqlCommand(query, conexao);
+       
+        command.Parameters.AddWithValue("@id", UsuarioAtual.Id);
+
+
+        try
+        {
+            conexao.Open();
+            var linhasAfetadas = command.ExecuteNonQuery();
+            if (linhasAfetadas > 0)
+            {
+
+                MessageBox.Show("Perfil deletado com sucesso!");
+                Close();
+            }
+
+            
+        }
+        
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
         }
     }
 }

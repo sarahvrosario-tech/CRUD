@@ -12,11 +12,12 @@
         <Border Background="White"
                 CornerRadius="8"
                 Padding="30"
+                
                 Width="380">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.1" />
-            </Border.Effect>
-
+            </Border.Effect >
+            
             <StackPanel>
                 <TextBlock Text="Meu Perfil"
                            FontSize="24"
@@ -97,7 +98,7 @@
                         Foreground="#DC2626"
                         BorderThickness="0"
                         Margin="0,15,0,0"
-                        Cursor="Hand">
+                        Cursor="Hand" Click="BtnDeletarPerfil_OnClick">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -117,5 +118,6 @@
 
             </StackPanel>
         </Border>
+        
     </Grid>
 </Window>
