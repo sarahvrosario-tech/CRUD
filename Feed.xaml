@@ -59,11 +59,15 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Button Content="Curtir"
                                                 Padding="12,6"
-                                                Margin="0,0,8,0" />
+                                                Margin="0,0,8,0" 
+                                                Click="BtnCurtir_OnClick"
+                                                Tag="{Binding}"/>
 
-                                        <TextBlock Text="27 curtidas"
+                                        <TextBlock 
                                                    VerticalAlignment="Center"
-                                                   Foreground="Gray" />
+                                                   Foreground="Gray"
+                                                   Margin="8,0"
+                                                   Text="{Binding Curtidas,StringFormat='{}{0} cutidas'}"/>
                                     </StackPanel>
 
                                 </StackPanel>
