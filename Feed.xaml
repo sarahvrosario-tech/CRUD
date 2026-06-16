@@ -58,10 +58,22 @@
                                     <!-- Rodapé -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button Content="Curtir"
+                                                     
                                                 Padding="12,6"
                                                 Margin="0,0,8,0" 
                                                 Click="BtnCurtir_OnClick"
-                                                Tag="{Binding}"/>
+                                                Tag="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="DarkBlue"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding FoiCurtido}" Value="True">
+                                                            <Setter Property="Foreground" Value="#FF0000"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
 
                                         <TextBlock 
                                                    VerticalAlignment="Center"
