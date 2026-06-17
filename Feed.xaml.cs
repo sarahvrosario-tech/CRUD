@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using CRUD.Modelos;
 using MySql.Data.MySqlClient;
 
@@ -8,7 +7,8 @@ namespace CRUD;
 
 public partial class Feed : Window
 {
-    private Usuario _usuario;
+    private readonly Usuario _usuario;
+
     public Feed(Usuario usuario)
     {
         _usuario = usuario;
@@ -21,12 +21,13 @@ public partial class Feed : Window
         List<Postagem> listaPostagens = [];
 
         const string query =
-            "SELECT p.id, p.conteudo, p.curtidas, p.postado_em, u.nome, u.username," + "IF(cp.usuario_id IS NOT NULL,TRUE,FALSE) AS curtido FROM postagens p    INNER JOIN usuarios u ON p.usuario_id = u.id LEFT JOIN curtidas_postagens cp ON cp.postagem_id = p.id  AND cp.usuario_id= @usuario_id ORDER BY  postado_em DESC;";
+            "SELECT p.id, p.conteudo, p.curtidas, p.postado_em, u.nome, u.username," +
+            "IF(cp.usuario_id IS NOT NULL,TRUE,FALSE) AS curtido FROM postagens p    INNER JOIN usuarios u ON p.usuario_id = u.id LEFT JOIN curtidas_postagens cp ON cp.postagem_id = p.id  AND cp.usuario_id= @usuario_id ORDER BY  postado_em DESC;";
 
         using var conexao = new MySqlConnection(App.StringConexao);
         using var comando = new MySqlCommand(query, conexao);
         comando.Parameters.AddWithValue("@usuario_id", _usuario.Id);
-        
+
         try
         {
             conexao.Open();
@@ -38,15 +39,15 @@ public partial class Feed : Window
                 return;
             }
 
-            while (leitor.Read()) 
+            while (leitor.Read())
             {
                 var post = new Postagem
                 {
                     Id = leitor.GetInt32("id"),
                     Conteudo = leitor.GetString("conteudo"),
                     Curtidas = leitor.GetInt32("curtidas"),
-                    Postado_em = leitor.GetDateTime("postado_em"),
-                    FoiCurtido =  leitor.GetBoolean("curtido"),
+                    Postadoem = leitor.GetDateTime("postado_em"),
+                    FoiCurtido = leitor.GetBoolean("curtido"),
                     Usuario = new Usuario
                     {
                         Nome = leitor.GetString("nome"),
@@ -55,6 +56,7 @@ public partial class Feed : Window
                 };
                 listaPostagens.Add(post);
             }
+
             ItemsControlFeed.ItemsSource = listaPostagens;
         }
         catch (Exception e)
@@ -64,52 +66,50 @@ public partial class Feed : Window
     }
 
     private void BtnCurtir_OnClick(object sender, RoutedEventArgs e)
-    
+
     {
         var botao = (Button)sender;
         var postagem = (Postagem)botao.Tag;
         var query = "SELECT 1 FROM curtidas_postagens WHERE usuario_id = @usuario_id AND postagem_id = @postagem";
-      
+
         using var conexao = new MySqlConnection(App.StringConexao);
         using var comando = new MySqlCommand(query, conexao);
 
         comando.Parameters.AddWithValue("@usuario_id", _usuario.Id);
         comando.Parameters.AddWithValue("@postagem", postagem.Id);
-        
+
 
         try
         {
             conexao.Open();
-           var leitor = comando.ExecuteReader();
-           string acao;
-          
-           
-           if (leitor.HasRows)
-           {
-               query = "DELETE FROM curtidas_postagens WHERE usuario_id = @usuario_id AND postagem_id = @postagem";
-               acao = "descurtir";
-               postagem.FoiCurtido = false;
-               postagem.Curtidas--;
-           }
-           else
-           {
-               query = "INSERT INTO curtidas_postagens(usuario_id, postagem_id) VALUES (@usuario_id, @postagem)";
-               acao = "curtir";
-               postagem.FoiCurtido = true;
-               postagem.Curtidas++;
-           }
+            var leitor = comando.ExecuteReader();
+            string acao;
 
-           conexao.Close();
+
+            if (leitor.HasRows)
+            {
+                query = "DELETE FROM curtidas_postagens WHERE usuario_id = @usuario_id AND postagem_id = @postagem";
+                acao = "descurtir";
+                postagem.FoiCurtido = false;
+                postagem.Curtidas--;
+            }
+            else
+            {
+                query = "INSERT INTO curtidas_postagens(usuario_id, postagem_id) VALUES (@usuario_id, @postagem)";
+                acao = "curtir";
+                postagem.FoiCurtido = true;
+                postagem.Curtidas++;
+            }
+
+            conexao.Close();
             comando.CommandText = query;
             conexao.Open();
-           var linhasAfetadas =comando.ExecuteNonQuery();
+            var linhasAfetadas = comando.ExecuteNonQuery();
             if (linhasAfetadas == 0) throw new Exception($"Erro ao{acao} curtir postagem!");
-
         }
         catch (Exception exception)
         {
-           MessageBox.Show(exception.Message);
-            
+            MessageBox.Show(exception.Message);
         }
     }
 }

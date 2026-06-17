@@ -5,40 +5,40 @@ namespace CRUD.Modelos;
 
 public class Postagem : INotifyPropertyChanged
 {
-    public bool _foiCurtido;
     private int _curtidas;
-    
-    
-    public int Id { get; set; }
-    
-    public string Conteudo { get; set; }
+    public bool _foiCurtido;
 
-    public int Curtidas 
+
+    public int Id { get; set; }
+
+    public string Conteudo { get; set; } = string.Empty;
+
+    public int Curtidas
     {
         get => _curtidas;
-            set
-            {
-                _curtidas = value;
-                NotificarPropiedadeAlterada();
-            }
+        set
+        {
+            _curtidas = value;
+            NotificarPropiedadeAlterada();
+        }
     }
-    public DateTime Postado_em { get; set; }
 
-    public Usuario Usuario { get; set; }
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public DateTime Postadoem { get; set; }
+
+    public Usuario Usuario { get; set; } = null!;
 
     public bool FoiCurtido
     {
         get => _foiCurtido;
         set
         {
-            if (_foiCurtido != value)
-            {
-                _foiCurtido = value;
-                NotificarPropiedadeAlterada();
-            }
+            if (_foiCurtido == value) return;
+            _foiCurtido = value;
+            NotificarPropiedadeAlterada();
         }
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void NotificarPropiedadeAlterada([CallerMemberName] string nomepropriedade = "")
     {

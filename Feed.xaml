@@ -44,7 +44,7 @@
                                         </StackPanel>
 
                                         <TextBlock Grid.Column="1"
-                                                   Text="{Binding Postado_em, StringFormat=' dd MMM - HH:mm'}"
+                                                   Text="{Binding Postadoem, StringFormat=' dd MMM - HH:mm'}"
                                                    Foreground="Gray"
                                                    FontSize="12" />
                                     </Grid>
@@ -58,28 +58,28 @@
                                     <!-- Rodapé -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button Content="Curtir"
-                                                     
+
                                                 Padding="12,6"
-                                                Margin="0,0,8,0" 
+                                                Margin="0,0,8,0"
                                                 Click="BtnCurtir_OnClick"
                                                 Tag="{Binding}">
                                             <Button.Style>
                                                 <Style TargetType="Button">
-                                                    <Setter Property="Background" Value="DarkBlue"/>
+                                                    <Setter Property="Background" Value="DarkBlue" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding FoiCurtido}" Value="True">
-                                                            <Setter Property="Foreground" Value="#FF0000"/>
+                                                            <Setter Property="Foreground" Value="#FF0000" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Style>
                                         </Button>
 
-                                        <TextBlock 
-                                                   VerticalAlignment="Center"
-                                                   Foreground="Gray"
-                                                   Margin="8,0"
-                                                   Text="{Binding Curtidas,StringFormat='{}{0} cutidas'}"/>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Foreground="Gray"
+                                            Margin="8,0"
+                                            Text="{Binding Curtidas,StringFormat='{}{0} cutidas'}" />
                                     </StackPanel>
 
                                 </StackPanel>

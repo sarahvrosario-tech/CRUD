@@ -1,13 +1,12 @@
 using System.Windows;
 using CRUD.Modelos;
 using MySql.Data.MySqlClient;
-using Mysqlx.Expect;
 
 namespace CRUD;
 
 public partial class MeuPerfil : Window
 {
-    private Usuario UsuarioAtual;
+    private readonly Usuario UsuarioAtual;
 
     public MeuPerfil(Usuario usuario)
     {
@@ -75,23 +74,23 @@ public partial class MeuPerfil : Window
         }
         catch (Exception exception)
         {
-            MessageBox.Show($"Erro de DB.");
+            MessageBox.Show("Erro de DB.");
         }
     }
 
 
     private void BtnDeletarPerfil_OnClick(object sender, RoutedEventArgs e)
     {
-        
-         var resultadoMessageBox = MessageBox.Show("Você tem certeza que deseja apagar o seu perfil?", "Confirmação de exclusão",
+        var resultadoMessageBox = MessageBox.Show("Você tem certeza que deseja apagar o seu perfil?",
+            "Confirmação de exclusão",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-         if (resultadoMessageBox == MessageBoxResult.No) return;
-         
-        string query = "DELETE FROM usuarios   WHERE id = @id";
+        if (resultadoMessageBox == MessageBoxResult.No) return;
+
+        var query = "DELETE FROM usuarios   WHERE id = @id";
         using var conexao = new MySqlConnection(App.StringConexao);
         using var command = new MySqlCommand(query, conexao);
-       
+
         command.Parameters.AddWithValue("@id", UsuarioAtual.Id);
 
 
@@ -101,14 +100,11 @@ public partial class MeuPerfil : Window
             var linhasAfetadas = command.ExecuteNonQuery();
             if (linhasAfetadas > 0)
             {
-
                 MessageBox.Show("Perfil deletado com sucesso!");
                 Close();
             }
-
-            
         }
-        
+
         catch (Exception exception)
         {
             Console.WriteLine(exception);
