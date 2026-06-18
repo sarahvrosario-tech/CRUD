@@ -95,6 +95,33 @@
 
         </ScrollViewer>
 
-
+        <Button Width="56"
+                Height="56"
+                FontSize="28"
+                FontWeight="Bold"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,20,20"
+                Background="DarkBlue"
+                Foreground="White"
+                BorderThickness="0"
+                Cursor="Hand"
+               Click="BtnNovoPost_OnClick" >
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="28">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+            <Path Data="M440 -120 v-320 H120 v-80 h320 v-320 h80 v320 h320 v80 H520 v320 h-80 Z"
+                  Fill="White"
+                  Stretch="Fill"
+                  Width="18"
+                  Height="18"
+                  />
+        </Button>
     </Grid>
 </Window>
