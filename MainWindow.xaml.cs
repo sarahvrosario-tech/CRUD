@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using CRUD.Modelos;
 using MySql.Data.MySqlClient;
 
@@ -52,7 +52,7 @@ public partial class MainWindow : Window
                     Id = leitor.GetInt32("id"),
                     Nome = leitor.GetString("nome"),
                     Email = leitor.GetString("email"),
-                    Username = leitor.GetString("username"),
+                    Username = leitor.GetString("username")
                 };
 
                 new Feed(usuarioBanco).Show();
@@ -61,14 +61,17 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception);
+            MessageBox.Show($"Erro: {exception.Message}", "Erro!");
+        }
+        finally
+        {
+            conexao.Close();
         }
     }
 
     private void BtnCadastro_OnClick(object sender, RoutedEventArgs e)
     {
-        var janelaCadastro = new Cadastro();
-        janelaCadastro.Show();
+        new Cadastro().Show();
         Close();
     }
 }

@@ -10,7 +10,6 @@ public partial class Cadastro : Window
     {
         InitializeComponent();
         TxtNome.Focus();
-        
     }
 
     private void BtnCadastrar_OnClick(object sender, RoutedEventArgs e)
@@ -26,7 +25,7 @@ public partial class Cadastro : Window
 
         using var conexao = new MySqlConnection(App.StringConexao);
         const string query =
-            "INSERT INTO usuarios(nome, username, email, senha) VALUES(@nome, @username, @email, @senha ); SELECT LAST_INSERT_ID();";
+            "INSERT INTO usuarios(nome, username, email, senha) VALUES(@nome, @username, @email, @senha); SELECT LAST_INSERT_ID()";
 
         using var comando = new MySqlCommand(query, conexao);
         comando.Parameters.AddWithValue("@nome", TxtNome.Text);
@@ -38,14 +37,13 @@ public partial class Cadastro : Window
         {
             conexao.Open();
             var idGerado = comando.ExecuteScalar();
-            if (idGerado is null ) throw new Exception("Cadastro não foi realizado!");
-            new Feed(new Usuario 
+            if (idGerado is null) throw new Exception("Cadastro não foi realizado");
+            new Feed(new Usuario
             {
-             Nome   = TxtNome.Text,
-             Email = TxtEmail.Text,
-             Username = TxtUsername.Text,
-             Id = Convert.ToInt32(idGerado)
-             
+                Nome = TxtNome.Text,
+                Email = TxtEmail.Text,
+                Username = TxtUsername.Text,
+                Id = Convert.ToInt32(idGerado)
             }).Show();
             Close();
         }
@@ -57,7 +55,11 @@ public partial class Cadastro : Window
                 return;
             }
 
-            MessageBox.Show(exception.Message); 
+            MessageBox.Show(exception.Message);
+        }
+        finally
+        {
+            conexao.Close();
         }
     }
 }

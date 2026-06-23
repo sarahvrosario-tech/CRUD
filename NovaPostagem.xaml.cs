@@ -7,7 +7,6 @@ namespace CRUD;
 
 public partial class NovaPostagem : Window
 {
-    private Usuario usuario;
     private readonly Usuario _usuario;
 
     public NovaPostagem(Usuario usuario)
@@ -25,24 +24,25 @@ public partial class NovaPostagem : Window
     {
         if (string.IsNullOrWhiteSpace(TbConteudo.Text))
         {
-            MessageBox.Show(" esvreva algo!");
+            MessageBox.Show("Escreva algo no conteudo!");
             TbConteudo.Focus();
             return;
         }
 
         using var conexao = new MySqlConnection(App.StringConexao);
 
-        const string query = "INSERT INTO postagens (conteudo, usuario_id)VALUES (@conteudo, @usuario_id)";
+        const string query = "INSERT INTO postagens (conteudo, usuario_id) VALUES (@conteudo, @usuario_id)";
 
-        using var commad = new MySqlCommand(query, conexao);
-        commad.Parameters.AddWithValue("@conteudo", TbConteudo.Text);
-        commad.Parameters.AddWithValue("@usuario_id", _usuario.Id);
+        using var comando = new MySqlCommand(query, conexao);
+        comando.Parameters.AddWithValue("@conteudo", TbConteudo.Text);
+        comando.Parameters.AddWithValue("@usuario_id", _usuario.Id);
+
         try
         {
             conexao.Open();
-            var linhasAfetadas = commad.ExecuteNonQuery();
-            if (linhasAfetadas < 1) throw new Exception("erro ao postar conteudo!");
-            MessageBox.Show("Conteudo adicionado com sucesso!");
+            var linhasAfetadas = comando.ExecuteNonQuery();
+            if (linhasAfetadas < 1) throw new Exception("Erro ao postar conteudo!");
+            MessageBox.Show("Postagem realizada com sucesso");
         }
         catch (Exception exception)
         {
