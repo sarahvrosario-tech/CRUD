@@ -8,6 +8,7 @@ namespace CRUD;
 public partial class NovaPostagem : Window
 {
     private readonly Usuario _usuario;
+    private readonly Postagem? _postagem;
 
     public NovaPostagem(Usuario usuario)
     {
@@ -15,8 +16,13 @@ public partial class NovaPostagem : Window
         InitializeComponent();
         TbConteudo.Focus();
     }
-    
 
+    public NovaPostagem(Usuario usuario, Postagem postagem) : this(usuario)
+    {
+     _postagem = postagem;
+      
+        
+    }
     private void TbConteudo_OnTextChanged(object sender, TextChangedEventArgs e)
     {
         lblCaracteresMax.Content = $"{TbConteudo.Text.Length}/140";

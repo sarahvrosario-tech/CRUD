@@ -173,5 +173,10 @@ public partial class Feed : Window
 
     private void BtnEditar_OnClick(object sender, RoutedEventArgs e)
     {
+        var botao = (Button)sender;
+        var postagemId = (int)botao.Tag;
+        
+        new NovaPostagem(_usuario, ).ShowDialog();
+        CarregarPosts_QuandoIniciar();
     }
 }
