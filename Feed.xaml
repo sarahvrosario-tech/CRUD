@@ -19,7 +19,7 @@
     </Window.DataContext> 
 
     <Grid>
-        <Border Background="White"
+        <Border Background=" AliceBlue"
                 CornerRadius="8"
                 Padding="30"
                 Width="420"
@@ -49,7 +49,7 @@
                         <ItemsControl x:Name="ItemsControlFeed" ItemsSource="{Binding Postagens}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type modelos:Postagem}">
-                                    <Border BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Margin="0,0,0,20"
+                                    <Border BorderBrush="Plum" BorderThickness="0,0,0,1" Margin="0,0,0,20"
                                             Padding="0,0,0,15">
                                         <StackPanel>
                                             <DockPanel Margin="0,0,0,10">
