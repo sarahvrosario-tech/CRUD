@@ -5,23 +5,26 @@ using MySql.Data.MySqlClient;
 
 namespace CRUD;
 
-public partial class NovaPostagem : Window
+public partial class JanelaPostagem : Window
 {
     private readonly Usuario _usuario;
     private readonly Postagem? _postagem;
+    private readonly bool _ehEdicao = false;
 
-    public NovaPostagem(Usuario usuario)
+    public JanelaPostagem(Usuario usuario)
     {
         _usuario = usuario;
         InitializeComponent();
         TbConteudo.Focus();
     }
 
-    public NovaPostagem(Usuario usuario, Postagem postagem) : this(usuario)
+    public JanelaPostagem(Usuario usuario, Postagem postagem) : this(usuario)
     {
+     _ehEdicao = true;
      _postagem = postagem;
-      
-        
+      Title = "Editar  Postagem";
+     TbConteudo.Text = postagem.Conteudo;
+     BtnPostar.Content = "Salvar alteraçoes";
     }
     private void TbConteudo_OnTextChanged(object sender, TextChangedEventArgs e)
     {
@@ -39,12 +42,30 @@ public partial class NovaPostagem : Window
 
         using var conexao = new MySqlConnection(App.StringConexao);
 
-        const string query = "INSERT INTO postagens (conteudo, usuario_id) VALUES (@conteudo, @usuario_id)";
+        string query;
+
+        if (_ehEdicao)
+        {
+            query = "UPDATE postagens SET conteudo = @conteudo WHERE id = @postagem_Id";
+        }
+        else
+        {
+           query = "INSERT INTO postagens (conteudo, usuario_id) VALUES (@conteudo, @usuario_id)";
+            
+        }
 
         using var comando = new MySqlCommand(query, conexao);
         comando.Parameters.AddWithValue("@conteudo", TbConteudo.Text);
-        comando.Parameters.AddWithValue("@usuario_id", _usuario.Id);
 
+
+        if (_ehEdicao)
+        {
+            comando.Parameters.AddWithValue("@postagem_id", _postagem!.Id);
+        }
+        else
+        {
+            comando.Parameters.AddWithValue("@usuario_id", _usuario.Id);
+        }
         try
         {
             conexao.Open();
